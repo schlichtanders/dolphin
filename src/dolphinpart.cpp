@@ -593,7 +593,7 @@ void DolphinPart::updateNewMenu()
     m_newFileMenu->checkUpToDate();
     m_newFileMenu->setViewShowsHiddenFiles(m_view->hiddenFilesShown());
     // And set the files that the menu apply on :
-    m_newFileMenu->setPopupFiles(QList<QUrl>() << url());
+    m_newFileMenu->setWorkingDirectory(url());
 }
 
 void DolphinPart::updateStatusBar()
@@ -609,7 +609,7 @@ void DolphinPart::updateProgress(int percent)
 void DolphinPart::createDirectory()
 {
     m_newFileMenu->setViewShowsHiddenFiles(m_view->hiddenFilesShown());
-    m_newFileMenu->setPopupFiles(QList<QUrl>() << url());
+    m_newFileMenu->setWorkingDirectory(url());
     m_newFileMenu->createDirectory();
 }
 

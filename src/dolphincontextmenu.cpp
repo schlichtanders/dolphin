@@ -199,7 +199,7 @@ void DolphinContextMenu::addDirectoryItemContextMenu()
     const DolphinView* view = m_mainWindow->activeViewContainer()->view();
     newFileMenu->setViewShowsHiddenFiles(view->hiddenFilesShown());
     newFileMenu->checkUpToDate();
-    newFileMenu->setPopupFiles(QList<QUrl>() << m_fileInfo.url());
+    newFileMenu->setWorkingDirectory(m_fileInfo.url());
     newFileMenu->setEnabled(selectedItemsProps.supportsWriting());
     connect(newFileMenu, &DolphinNewFileMenu::fileCreated, newFileMenu, &DolphinNewFileMenu::deleteLater);
     connect(newFileMenu, &DolphinNewFileMenu::directoryCreated, newFileMenu, &DolphinNewFileMenu::deleteLater);
@@ -317,7 +317,7 @@ void DolphinContextMenu::openViewportContextMenu()
     KNewFileMenu* newFileMenu = m_mainWindow->newFileMenu();
     newFileMenu->setViewShowsHiddenFiles(view->hiddenFilesShown());
     newFileMenu->checkUpToDate();
-    newFileMenu->setPopupFiles(QList<QUrl>() << m_baseUrl);
+    newFileMenu->setWorkingDirectory(m_baseUrl);
     addMenu(newFileMenu->menu());
 
     // Show "open with" menu items even if the dir is empty, because there are legitimate
