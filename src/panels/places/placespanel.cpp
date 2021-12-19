@@ -34,6 +34,7 @@
 #include <KLocalizedString>
 #include <KMountPoint>
 #include <KPropertiesDialog>
+#include <KLazyLocalizedString>
 
 #include <QActionGroup>
 #include <QApplication>
@@ -341,16 +342,15 @@ void PlacesPanel::slotViewContextMenuRequested(const QPointF& pos)
     struct IconSizeInfo
     {
         int size;
-        const char* context;
-        const char* text;
+        const KLazyLocalizedString lazyLocalizedString;
     };
 
     const int iconSizeCount = 4;
     static const IconSizeInfo iconSizes[iconSizeCount] = {
-        {KIconLoader::SizeSmall,        I18NC_NOOP("Small icon size", "Small (%1x%2)")},
-        {KIconLoader::SizeSmallMedium,  I18NC_NOOP("Medium icon size", "Medium (%1x%2)")},
-        {KIconLoader::SizeMedium,       I18NC_NOOP("Large icon size", "Large (%1x%2)")},
-        {KIconLoader::SizeLarge,        I18NC_NOOP("Huge icon size", "Huge (%1x%2)")}
+        {KIconLoader::SizeSmall,        kli18nc("Small icon size", "Small (%1x%1)")},
+        {KIconLoader::SizeSmallMedium,  kli18nc("Medium icon size", "Medium (%1x%1)")},
+        {KIconLoader::SizeMedium,       kli18nc("Large icon size", "Large (%1x%1)")},
+        {KIconLoader::SizeLarge,        kli18nc("Huge icon size", "Huge (%1x%2)")}
     };
 
     QHash<QAction*, int> iconSizeActionMap;
@@ -358,8 +358,7 @@ void PlacesPanel::slotViewContextMenuRequested(const QPointF& pos)
 
     for (int i = 0; i < iconSizeCount; ++i) {
         const int size = iconSizes[i].size;
-        const QString text = i18nc(iconSizes[i].context, iconSizes[i].text,
-                                   size, size);
+        const QString text = KLocalizedString(iconSizes[i].lazyLocalizedString).subs(size, size).toString();
 
         QAction* action = iconSizeSubMenu->addAction(text);
         iconSizeActionMap.insert(action, size);
