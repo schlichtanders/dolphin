@@ -26,6 +26,7 @@ include(CMakePackageConfigHelpers)
 include(GenerateExportHeader)
 include(FeatureSummary)
 include(ECMQtDeclareLoggingCategory)
+include(KDEDeprecationSettings)
 
 ecm_setup_version(${RELEASE_SERVICE_VERSION} VARIABLE_PREFIX DOLPHIN
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/dolphin_version.h"
@@ -138,11 +139,9 @@ else()
     set(HAVE_TERMINAL TRUE)
 endif()
 
-add_definitions(
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050f00
-    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
-    -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055800
-    -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
+ecm_set_disabled_deprecation_versions(SHOW_DEPRECATIONS
+    QT ${QT_MIN_VERSION}
+    KF ${KF5_MIN_VERSION}
 )
 
 add_subdirectory(src)
