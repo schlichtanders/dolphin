@@ -337,7 +337,7 @@ QAccessible::State KItemListAccessibleCell::state() const
         state.multiSelectable = true;
     }
 
-    if (m_view->model()->isExpandable(m_index)) {
+    if (m_index >= 0 && m_view->model()->isExpandable(m_index)) {
         if (m_view->model()->isExpanded(m_index)) {
             state.expanded = true;
         } else {
@@ -350,6 +350,10 @@ QAccessible::State KItemListAccessibleCell::state() const
 
 bool KItemListAccessibleCell::isExpandable() const
 {
+    if (m_index < 0) {
+        return false;
+    }
+
     return m_view->model()->isExpandable(m_index);
 }
 

@@ -537,6 +537,10 @@ QSet<QByteArray> KFileItemModel::roles() const
 
 bool KFileItemModel::setExpanded(int index, bool expanded)
 {
+    if (index < 0) {
+        return false; // TODO: Remove after porting setExpanded
+    }
+
     if (!isExpandable(index) || isExpanded(index) == expanded) {
         return false;
     }
@@ -611,12 +615,12 @@ bool KFileItemModel::isExpanded(std::optional<int> index) const
     return false;
 }
 
-bool KFileItemModel::isExpandable(int index) const
+bool KFileItemModel::isExpandable(std::optional<int> index) const
 {
-    if (index >= 0 && index < count()) {
+    if (index.has_value() && index < count()) {
         // Call data (instead of accessing m_itemData directly)
         // to ensure that the value is initialized.
-        return data(index).value("isExpandable").toBool();
+        return data(index.value()).value("isExpandable").toBool();
     }
     return false;
 }

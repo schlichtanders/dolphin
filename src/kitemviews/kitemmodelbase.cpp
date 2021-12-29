@@ -97,7 +97,7 @@ bool KItemModelBase::isExpanded(std::optional<int> index) const
     return false;
 }
 
-bool KItemModelBase::isExpandable(int index) const
+bool KItemModelBase::isExpandable(std::optional<int> index) const
 {
     Q_UNUSED(index)
     return false;

@@ -224,7 +224,7 @@ bool KItemListController::keyPressEvent(QKeyEvent* event)
     int key = event->key();
 
     // Handle the expanding/collapsing of items
-    if (m_view->supportsItemExpanding() && m_model->isExpandable(index)) {
+    if (m_view->supportsItemExpanding() && m_model->isExpandable(index) && index >= 0) { // TODO: Remove after porting setExpanded
         if (key == Qt::Key_Right) {
             if (m_model->setExpanded(index, true)) {
                 return true;
@@ -654,7 +654,7 @@ bool KItemListController::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event,
 
     // Expand item if desired - See Bug 295573
     if (m_mouseDoubleClickAction != ActivateItemOnly) {
-        if (m_view && m_model && m_view->supportsItemExpanding() && m_model->isExpandable(index.value_or(-1))) {
+        if (m_view && m_model && m_view->supportsItemExpanding() && m_model->isExpandable(index)) {
             const bool expanded = m_model->isExpanded(index);
             m_model->setExpanded(index.value(), !expanded);
         }

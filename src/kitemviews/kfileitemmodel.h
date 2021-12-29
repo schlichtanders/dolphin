@@ -157,7 +157,7 @@ public:
 
     bool setExpanded(int index, bool expanded) override;
     bool isExpanded(std::optional<int> index) const override;
-    bool isExpandable(int index) const override;
+    bool isExpandable(std::optional<int> index) const override;
     int expandedParentsCount(int index) const override;
 
     QSet<QUrl> expandedDirectories() const;

@@ -124,7 +124,7 @@ public:
      * @return True if expanding and collapsing of the item with the index \a index
      *         is supported. Per default false is returned.
      */
-    virtual bool isExpandable(int index) const;
+    virtual bool isExpandable(std::optional<int> index) const;
 
     /**
      * @return Number of expanded parent items for the item with the given index.
