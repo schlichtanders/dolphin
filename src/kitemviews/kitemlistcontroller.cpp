@@ -224,7 +224,7 @@ bool KItemListController::keyPressEvent(QKeyEvent* event)
     int key = event->key();
 
     // Handle the expanding/collapsing of items
-    if (m_view->supportsItemExpanding() && m_model->isExpandable(index) && index >= 0) { // TODO: Remove after porting setExpanded
+    if (m_view->supportsItemExpanding() && index >= 0 && m_model->isExpandable(index)) {
         if (key == Qt::Key_Right) {
             if (m_model->setExpanded(index, true)) {
                 return true;
@@ -522,7 +522,7 @@ void KItemListController::slotAutoActivationTimeout()
     if (m_model->supportsDropping(index) && m_view->isUnderMouse()) {
         if (m_view->supportsItemExpanding() && m_model->isExpandable(index)) {
             const bool expanded = m_model->isExpanded(index);
-            m_model->setExpanded(index, !expanded);
+            m_model->setExpanded(index, !expanded); // index >= 0 is checked before
         } else if (m_autoActivationBehavior != ExpansionOnly) {
             Q_EMIT itemActivated(index);
         }
@@ -656,7 +656,7 @@ bool KItemListController::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event,
     if (m_mouseDoubleClickAction != ActivateItemOnly) {
         if (m_view && m_model && m_view->supportsItemExpanding() && m_model->isExpandable(index)) {
             const bool expanded = m_model->isExpanded(index);
-            m_model->setExpanded(index.value(), !expanded);
+            m_model->setExpanded(index, !expanded);
         }
     }
 
@@ -1579,7 +1579,7 @@ bool KItemListController::onRelease(const QPointF& pos, const Qt::KeyboardModifi
             bool emitItemActivated = true;
             if (m_view->isAboveExpansionToggle(index.value(), pos)) {
                 const bool expanded = m_model->isExpanded(index);
-                m_model->setExpanded(index.value(), !expanded);
+                m_model->setExpanded(index, !expanded);
 
                 Q_EMIT itemExpansionToggleClicked(index.value());
                 emitItemActivated = false;

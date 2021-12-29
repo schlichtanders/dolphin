@@ -155,7 +155,7 @@ public:
     void setRoles(const QSet<QByteArray>& roles);
     QSet<QByteArray> roles() const;
 
-    bool setExpanded(int index, bool expanded) override;
+    bool setExpanded(std::optional<int> index, bool expanded) override;
     bool isExpanded(std::optional<int> index) const override;
     bool isExpandable(std::optional<int> index) const override;
     int expandedParentsCount(int index) const override;

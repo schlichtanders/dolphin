@@ -861,7 +861,7 @@ void KFileItemModelTest::testSorting()
     KItemRangeList itemRangeList = itemsInsertedSpy.takeFirst().at(0).value<KItemRangeList>();
     QCOMPARE(itemRangeList, KItemRangeList() << KItemRange(0, 5));
 
-    int index = m_model->index(QUrl(m_testDir->url().url() + "/c"));
+    std::optional<int> index = m_model->index(QUrl(m_testDir->url().url() + "/c"));
     m_model->setExpanded(index, true);
     QVERIFY(itemsInsertedSpy.wait());
     QCOMPARE(itemsInsertedSpy.count(), 1);
@@ -869,6 +869,9 @@ void KFileItemModelTest::testSorting()
     QCOMPARE(itemRangeList, KItemRangeList() << KItemRange(1, 2));
 
     index = m_model->index(QUrl(m_testDir->url().url() + "/c/c-2"));
+    if (index < 0) {
+        index = std::nullopt;
+    }
     m_model->setExpanded(index, true);
     QVERIFY(itemsInsertedSpy.wait());
     QCOMPARE(itemsInsertedSpy.count(), 1);
@@ -1167,7 +1170,7 @@ void KFileItemModelTest::testAddItemToFilteredExpandedFolder()
 
     // Expand "a/".
     m_model->setExpanded(0, true);
-    QVERIFY(itemsInsertedSpy.wait());   
+    QVERIFY(itemsInsertedSpy.wait());
 
     // Expand "a/b/".
     m_model->setExpanded(1, true);
@@ -1202,7 +1205,7 @@ void KFileItemModelTest::testDeleteItemsWithExpandedFolderWithFilter()
 {
     QSignalSpy itemsInsertedSpy(m_model, &KFileItemModel::itemsInserted);
     QSignalSpy itemsRemovedSpy(m_model, &KFileItemModel::itemsRemoved);
-    
+
     QSet<QByteArray> modelRoles = m_model->roles();
     modelRoles << "isExpanded" << "isExpandable" << "expandedParentsCount";
     m_model->setRoles(modelRoles);
@@ -1215,7 +1218,7 @@ void KFileItemModelTest::testDeleteItemsWithExpandedFolderWithFilter()
 
     // Expand "a/".
     m_model->setExpanded(0, true);
-    QVERIFY(itemsInsertedSpy.wait());   
+    QVERIFY(itemsInsertedSpy.wait());
 
     // Expand "a/b/".
     m_model->setExpanded(1, true);
@@ -1316,7 +1319,7 @@ void KFileItemModelTest::testRefreshExpandedFolderWithFilter() {
 
     // Expand "a/".
     m_model->setExpanded(0, true);
-    QVERIFY(itemsInsertedSpy.wait());   
+    QVERIFY(itemsInsertedSpy.wait());
 
     // Expand "a/b/".
     m_model->setExpanded(1, true);
@@ -1334,7 +1337,7 @@ void KFileItemModelTest::testRefreshExpandedFolderWithFilter() {
     // Objects used to rename
     const KFileItem fileItemA = m_model->fileItem(0);
     KFileItem fileItemARenamed = fileItemA;
-    fileItemARenamed.setUrl(QUrl("a_renamed"));    
+    fileItemARenamed.setUrl(QUrl("a_renamed"));
 
     const KFileItem fileItemSomeFolder = m_model->fileItem(2);
     KFileItem fileItemRenamedFolder = fileItemSomeFolder;

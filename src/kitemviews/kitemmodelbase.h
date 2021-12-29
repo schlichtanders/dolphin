@@ -110,7 +110,7 @@ public:
      *
      * @return True if the operation has been successful.
      */
-    virtual bool setExpanded(int index, bool expanded);
+    virtual bool setExpanded(std::optional<int> index, bool expanded);
 
     /**
      * @return True if the item with the index \a index is expanded.

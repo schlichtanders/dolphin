@@ -84,7 +84,7 @@ QList<QPair<int, QVariant> > KItemModelBase::groups() const
     return QList<QPair<int, QVariant> >();
 }
 
-bool KItemModelBase::setExpanded(int index, bool expanded)
+bool KItemModelBase::setExpanded(std::optional<int> index, bool expanded)
 {
     Q_UNUSED(index)
     Q_UNUSED(expanded)

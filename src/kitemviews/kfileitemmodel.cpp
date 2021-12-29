@@ -535,30 +535,26 @@ QSet<QByteArray> KFileItemModel::roles() const
     return m_roles;
 }
 
-bool KFileItemModel::setExpanded(int index, bool expanded)
+bool KFileItemModel::setExpanded(std::optional<int> index, bool expanded)
 {
-    if (index < 0) {
-        return false; // TODO: Remove after porting setExpanded
-    }
-
-    if (!isExpandable(index) || isExpanded(index) == expanded) {
+    if (!isExpandable(index) || isExpanded(index) == expanded) { // Also ensure index has a value
         return false;
     }
 
     QHash<QByteArray, QVariant> values;
     values.insert(sharedValue("isExpanded"), expanded);
-    if (!setData(index, values)) {
+    if (!setData(index.value(), values)) {
         return false;
     }
 
-    const KFileItem item = m_itemData.at(index)->item;
+    const KFileItem item = m_itemData.at(index.value())->item;
     const QUrl url = item.url();
     const QUrl targetUrl = item.targetUrl();
     if (expanded) {
         m_expandedDirs.insert(targetUrl, url);
         m_dirLister->openUrl(url, KDirLister::Keep);
 
-        const QVariantList previouslyExpandedChildren = m_itemData.at(index)->values.value("previouslyExpandedChildren").value<QVariantList>();
+        const QVariantList previouslyExpandedChildren = m_itemData.at(index.value())->values.value("previouslyExpandedChildren").value<QVariantList>();
         for (const QVariant& var : previouslyExpandedChildren) {
             m_urlsToExpand.insert(var.toUrl());
         }
@@ -571,16 +567,16 @@ bool KFileItemModel::setExpanded(int index, bool expanded)
 
         // Check if the index of the collapsed folder has changed. If that is the case, then items
         // were inserted before the collapsed folder, and its index needs to be updated.
-        if (m_itemData.at(index)->item != item) {
+        if (m_itemData.at(index.value())->item != item) {
             index = this->index(item);
         }
 
         m_expandedDirs.remove(targetUrl);
         m_dirLister->stop(url);
 
-        const int parentLevel = expandedParentsCount(index);
+        const int parentLevel = expandedParentsCount(index.value());
         const int itemCount = m_itemData.count();
-        const int firstChildIndex = index + 1;
+        const int firstChildIndex = index.value() + 1;
 
         QVariantList expandedChildren;
 
@@ -598,10 +594,10 @@ bool KFileItemModel::setExpanded(int index, bool expanded)
         }
         const int childrenCount = childIndex - firstChildIndex;
 
-        removeFilteredChildren(KItemRangeList() << KItemRange(index, 1 + childrenCount));
+        removeFilteredChildren(KItemRangeList() << KItemRange(index.value(), 1 + childrenCount));
         removeItems(KItemRangeList() << KItemRange(firstChildIndex, childrenCount), DeleteItemData);
 
-        m_itemData.at(index)->values.insert("previouslyExpandedChildren", expandedChildren);
+        m_itemData.at(index.value())->values.insert("previouslyExpandedChildren", expandedChildren);
     }
 
     return true;
