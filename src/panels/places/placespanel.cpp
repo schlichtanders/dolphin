@@ -518,7 +518,7 @@ void PlacesPanel::slotShowTooltip()
 
 void PlacesPanel::addEntry()
 {
-    const int index = m_controller->selectionManager()->currentItem();
+    const int index = m_controller->selectionManager()->currentItem().value_or(-1);
     const QUrl url = m_model->data(index).value("url").toUrl();
     const QString text = url.fileName().isEmpty() ? url.toDisplayString(QUrl::PreferLocalFile) : url.fileName();
 
