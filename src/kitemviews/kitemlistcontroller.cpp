@@ -655,7 +655,7 @@ bool KItemListController::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event,
     // Expand item if desired - See Bug 295573
     if (m_mouseDoubleClickAction != ActivateItemOnly) {
         if (m_view && m_model && m_view->supportsItemExpanding() && m_model->isExpandable(index.value_or(-1))) {
-            const bool expanded = m_model->isExpanded(index.value());
+            const bool expanded = m_model->isExpanded(index);
             m_model->setExpanded(index.value(), !expanded);
         }
     }
@@ -1578,7 +1578,7 @@ bool KItemListController::onRelease(const QPointF& pos, const Qt::KeyboardModifi
         if (buttons & Qt::LeftButton) {
             bool emitItemActivated = true;
             if (m_view->isAboveExpansionToggle(index.value(), pos)) {
-                const bool expanded = m_model->isExpanded(index.value());
+                const bool expanded = m_model->isExpanded(index);
                 m_model->setExpanded(index.value(), !expanded);
 
                 Q_EMIT itemExpansionToggleClicked(index.value());

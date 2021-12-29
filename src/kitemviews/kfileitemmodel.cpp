@@ -603,10 +603,10 @@ bool KFileItemModel::setExpanded(int index, bool expanded)
     return true;
 }
 
-bool KFileItemModel::isExpanded(int index) const
+bool KFileItemModel::isExpanded(std::optional<int> index) const
 {
-    if (index >= 0 && index < count()) {
-        return m_itemData.at(index)->values.value("isExpanded").toBool();
+    if (index.has_value() && index < count()) {
+        return m_itemData.at(index.value())->values.value("isExpanded").toBool();
     }
     return false;
 }

@@ -118,7 +118,7 @@ public:
      *         this method it is mandatory to overwrite KItemModelBase::isExpandable()
      *         and KItemListView::supportsExpandableItems() to return true.
      */
-    virtual bool isExpanded(int index) const;
+    virtual bool isExpanded(std::optional<int> index) const;
 
     /**
      * @return True if expanding and collapsing of the item with the index \a index
